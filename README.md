@@ -82,6 +82,7 @@ Choose from:
 ```
 
 ## 🎤 Voice & Phone Features
+<img width="1305" height="958" alt="Screenshot 2025-10-03 at 14 17 41" src="https://github.com/user-attachments/assets/e5234b1a-8081-4621-853a-3cbbd9b41418" />
 
 ### Browser Voice Interface
 Access at `http://localhost:8080/voice`
