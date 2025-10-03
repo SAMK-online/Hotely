@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Environment files
+.env
+*.env
+hotelpilot/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite3
+
+# Ngrok
+ngrok.yml
+.ngrok2/
+
+# Google Cloud
+credentials.json
+*-key.json
+
+# Node (if any frontend)
+node_modules/
+package-lock.json
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# API Keys - NEVER commit these
+*api_key*
+*secret*

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelPilot - AI Hotel Operations</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🏨</span>
+                <h1>HotelPilot</h1>
+                <span class="subtitle">Multi-Agent Hotel Operations AI</span>
+            </div>
+            <div class="status" id="status">
+                <span class="status-indicator"></span>
+                <span class="status-text">Connecting...</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-grid">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <h3>Select Agent</h3>
+                <div class="agent-list">
+                    <button class="agent-btn active" data-agent="ops_copilot">
+                        <span class="agent-icon">🎯</span>
+                        <div class="agent-info">
+                            <span class="agent-name">Ops Copilot</span>
+                            <span class="agent-desc">Main supervisor</span>
+                        </div>
+                    </button>
+                    <button class="agent-btn" data-agent="demand_manager">
+                        <span class="agent-icon">📊</span>
+                        <div class="agent-info">
+                            <span class="agent-name">Demand Manager</span>
+                            <span class="agent-desc">Pricing analyst</span>
+                        </div>
+                    </button>
+                    <button class="agent-btn" data-agent="guest_lifecycle">
+                        <span class="agent-icon">✉️</span>
+                        <div class="agent-info">
+                            <span class="agent-name">Guest Lifecycle</span>
+                            <span class="agent-desc">Communications</span>
+                        </div>
+                    </button>
+                    <button class="agent-btn" data-agent="housekeeping">
+                        <span class="agent-icon">🧹</span>
+                        <div class="agent-info">
+                            <span class="agent-name">Housekeeping</span>
+                            <span class="agent-desc">Room operations</span>
+                        </div>
+                    </button>
+                    <button class="agent-btn" data-agent="billing">
+                        <span class="agent-icon">💳</span>
+                        <div class="agent-info">
+                            <span class="agent-name">Billing Recovery</span>
+                            <span class="agent-desc">Payments</span>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="scenarios">
+                    <h3>Quick Scenarios</h3>
+                    <button class="scenario-btn" data-scenario="pricing">
+                        <span>🏷️</span> Dynamic Pricing
+                    </button>
+                    <button class="scenario-btn" data-scenario="guest">
+                        <span>👤</span> Guest Welcome
+                    </button>
+                    <button class="scenario-btn" data-scenario="housekeeping">
+                        <span>📋</span> Daily Schedule
+                    </button>
+                    <button class="scenario-btn" data-scenario="payment">
+                        <span>⚠️</span> Payment Recovery
+                    </button>
+                    <button class="scenario-btn" data-scenario="summary">
+                        <span>📈</span> Daily Summary
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Interface -->
+            <div class="chat-container">
+                <div class="chat-header">
+                    <span id="current-agent-icon">🎯</span>
+                    <span id="current-agent-name">Ops Copilot</span>
+                    <span class="badge">Online</span>
+                </div>
+
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message system">
+                        <div class="message-content">
+                            <p>Welcome to HotelPilot! 👋</p>
+                            <p>I'm your AI-powered hotel operations assistant. Select an agent from the sidebar or type your request below.</p>
+                            <p class="hotel-info">
+                                <strong>Arlington Hotel</strong><br>
+                                📍 120 rooms | 75% avg occupancy<br>
+                                💵 Rates: $129 standard | $189 deluxe | $299 suite
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-container">
+                    <textarea
+                        id="user-input"
+                        placeholder="Type your request here... (e.g., 'Analyze pricing for tomorrow with high flight demand')"
+                        rows="3"
+                    ></textarea>
+                    <button id="send-btn" class="send-btn">
+                        <span>Send</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Info Panel -->
+            <div class="info-panel">
+                <h3>Current Metrics</h3>
+                <div class="metrics">
+                    <div class="metric">
+                        <span class="metric-label">Occupancy</span>
+                        <span class="metric-value">75%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">ADR</span>
+                        <span class="metric-value">$142</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">RevPAR</span>
+                        <span class="metric-value">$106.50</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Arrivals Today</span>
+                        <span class="metric-value">22</span>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <button class="quick-action" onclick="clearChat()">🗑️ Clear Chat</button>
+                    <button class="quick-action" onclick="exportChat()">📥 Export Chat</button>
+                    <button class="quick-action" onclick="toggleTheme()">🌙 Dark Mode</button>
+                </div>
+
+                <div class="system-info">
+                    <h3>System Info</h3>
+                    <div class="info-item">
+                        <span>Model:</span>
+                        <span>Gemini 2.5 Flash</span>
+                    </div>
+                    <div class="info-item">
+                        <span>Agents:</span>
+                        <span>5 Active</span>
+                    </div>
+                    <div class="info-item">
+                        <span>Response Time:</span>
+                        <span id="response-time">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/voice.js"></script>
+</body>
+</html>

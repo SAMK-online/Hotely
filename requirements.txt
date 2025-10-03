@@ -1,0 +1,24 @@
+# Core Dependencies
+flask==3.0.0
+flask-cors==4.0.0
+python-dotenv==1.0.0
+
+# AI/ML
+google-generativeai==0.3.2
+google-cloud-speech==2.21.0  # Optional for enhanced voice
+google-cloud-texttospeech==2.14.1  # Optional for enhanced TTS
+
+# Async Operations
+aiohttp==3.9.1
+
+# WebSocket Support (for voice server)
+flask-socketio==5.3.5
+python-socketio==5.10.0
+
+# Development Tools
+requests==2.31.0
+numpy==1.24.3
+
+# Optional: Production Server
+gunicorn==21.2.0
+gevent==23.9.1

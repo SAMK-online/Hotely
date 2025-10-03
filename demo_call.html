@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HotelPilot - Call Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+        .call-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 20px 0;
+        }
+        .call-button:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .status.active {
+            background: #10b981;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏨 HotelPilot Demo</h1>
+        <p class="subtitle">Arlington Hotel Booking Assistant</p>
+
+        <div class="info">
+            <h3>Click to Start Call</h3>
+            <p>You'll speak with Sarah, our AI booking assistant</p>
+        </div>
+
+        <button class="call-button" onclick="startCall()">
+            📞 Call Arlington Hotel
+        </button>
+
+        <div id="status" class="status"></div>
+
+        <div class="info">
+            <strong>Try saying:</strong><br>
+            • "I need to book a room"<br>
+            • "What are your rates?"<br>
+            • "Do you have availability this weekend?"<br>
+            • "I'd like to make a reservation"
+        </div>
+    </div>
+
+    <!-- For demo, we'll use the Test Agent approach -->
+    <script>
+        function startCall() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status active';
+            statusDiv.textContent = '🚀 Opening Retell Test Agent...';
+
+            // For demo purposes, open the Retell test agent in a new window
+            // This is the most reliable way without additional setup
+            window.open('https://app.retellai.com/test-agent/agent_f3928cf5f8ca15a114e90663ce', '_blank');
+
+            statusDiv.textContent = '✅ Test Agent opened in new tab! Click the microphone to start talking.';
+
+            // Alternative: Direct users to the test console
+            setTimeout(() => {
+                statusDiv.innerHTML = `
+                    <strong>Demo Options:</strong><br>
+                    1. Use the Test Agent that just opened<br>
+                    2. Or go to your <a href="https://app.retellai.com" target="_blank">Retell Dashboard</a><br>
+                    3. Click your agent → Test Agent → Start talking!
+                `;
+            }, 2000);
+        }
+
+        // Alternative: Use Retell's built-in widget
+        function useWidget() {
+            // This creates a floating call button
+            const script = document.createElement('script');
+            script.src = 'https://sdk.retellai.com/retell-widget.js';
+            document.body.appendChild(script);
+
+            const widget = document.createElement('retell-widget');
+            widget.setAttribute('agent-id', 'agent_f3928cf5f8ca15a114e90663ce');
+            document.body.appendChild(widget);
+        }
+    </script>
+</body>
+</html>

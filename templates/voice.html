@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelPilot Voice Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .voice-container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .voice-button {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 3px solid white;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .voice-button:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .voice-button.listening {
+            animation: pulse 1.5s infinite;
+            background: rgba(16, 185, 129, 0.3);
+            border-color: #10b981;
+        }
+
+        .voice-button.speaking {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .mic-icon {
+            width: 60px;
+            height: 60px;
+            fill: white;
+        }
+
+        .status {
+            font-size: 16px;
+            margin-bottom: 20px;
+            min-height: 24px;
+        }
+
+        .transcript {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 100px;
+            margin-bottom: 20px;
+        }
+
+        .transcript h3 {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 10px;
+        }
+
+        .transcript p {
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .response {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 100px;
+            margin-bottom: 20px;
+        }
+
+        .response h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .response p {
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .instructions {
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .agent-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: white;
+            color: #764ba2;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .wake-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ef4444;
+            margin-right: 10px;
+        }
+
+        .wake-indicator.active {
+            background: #10b981;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="voice-container">
+        <h1>🏨 HotelPilot Voice</h1>
+        <p class="subtitle">Your AI Hotel Assistant</p>
+
+        <div class="voice-button" id="voiceButton">
+            <svg class="mic-icon" viewBox="0 0 24 24">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+            </svg>
+            <span class="agent-indicator" id="agentIndicator">Ops Copilot</span>
+        </div>
+
+        <div class="status">
+            <span class="wake-indicator" id="wakeIndicator"></span>
+            <span id="statusText">Say "Hey Hotel" to start</span>
+        </div>
+
+        <div class="transcript">
+            <h3>You said:</h3>
+            <p id="userTranscript">...</p>
+        </div>
+
+        <div class="response">
+            <h3>Hotel Assistant:</h3>
+            <p id="assistantResponse">Ready to help with your hotel operations.</p>
+        </div>
+
+        <div class="instructions">
+            <strong>Voice Commands:</strong><br>
+            • "Hey Hotel" - Wake word<br>
+            • "What are today's rates?"<br>
+            • "Show me the occupancy"<br>
+            • "Create a guest welcome message"<br>
+            • "Schedule housekeeping"<br>
+            <br>
+            Or click the microphone to speak directly.
+        </div>
+    </div>
+
+    <script>
+        // Simple voice interface
+        class SimpleVoice {
+            constructor() {
+                this.recognition = null;
+                this.isListening = false;
+                this.wakeListen = false;
+                this.button = document.getElementById('voiceButton');
+                this.status = document.getElementById('statusText');
+                this.transcript = document.getElementById('userTranscript');
+                this.response = document.getElementById('assistantResponse');
+                this.wakeIndicator = document.getElementById('wakeIndicator');
+                this.agentIndicator = document.getElementById('agentIndicator');
+
+                this.initRecognition();
+                this.setupEventListeners();
+            }
+
+            initRecognition() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (SpeechRecognition) {
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.continuous = true;
+                    this.recognition.interimResults = true;
+                    this.recognition.lang = 'en-US';
+
+                    this.recognition.onresult = (event) => {
+                        const last = event.results.length - 1;
+                        const transcript = event.results[last][0].transcript;
+
+                        if (event.results[last].isFinal) {
+                            this.handleTranscript(transcript);
+                        } else {
+                            this.transcript.textContent = transcript + '...';
+                        }
+                    };
+
+                    this.recognition.onstart = () => {
+                        this.button.classList.add('listening');
+                        this.status.textContent = 'Listening...';
+                    };
+
+                    this.recognition.onend = () => {
+                        this.button.classList.remove('listening');
+                        if (!this.wakeListen) {
+                            this.status.textContent = 'Click to speak or say "Hey Hotel"';
+                        }
+                        this.isListening = false;
+                    };
+
+                    // Start wake word listening
+                    this.startWakeWordListening();
+                }
+            }
+
+            startWakeWordListening() {
+                this.wakeListen = true;
+                this.wakeIndicator.classList.add('active');
+                if (!this.isListening) {
+                    this.isListening = true;
+                    this.recognition.start();
+                }
+            }
+
+            handleTranscript(transcript) {
+                this.transcript.textContent = transcript;
+
+                // Check for wake word
+                if (transcript.toLowerCase().includes('hey hotel') ||
+                    transcript.toLowerCase().includes('okay hotel')) {
+                    this.status.textContent = 'Yes, how can I help?';
+                    this.speak('Yes, how can I help you?');
+                    return;
+                }
+
+                // Send to backend
+                this.processCommand(transcript);
+            }
+
+            async processCommand(command) {
+                try {
+                    // Determine agent based on command
+                    let agent = 'ops_copilot';
+                    if (command.toLowerCase().includes('pric') || command.toLowerCase().includes('rate')) {
+                        agent = 'demand_manager';
+                        this.agentIndicator.textContent = 'Demand Manager';
+                    } else if (command.toLowerCase().includes('guest') || command.toLowerCase().includes('welcome')) {
+                        agent = 'guest_lifecycle';
+                        this.agentIndicator.textContent = 'Guest Lifecycle';
+                    } else if (command.toLowerCase().includes('clean') || command.toLowerCase().includes('housekeeping')) {
+                        agent = 'housekeeping';
+                        this.agentIndicator.textContent = 'Housekeeping';
+                    }
+
+                    // Call the API
+                    const response = await fetch('/api/process', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            agent: agent,
+                            input: command
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.response.textContent = data.response;
+                        this.speak(data.response);
+                    }
+                } catch (error) {
+                    this.response.textContent = 'Sorry, I had trouble processing that.';
+                    this.speak('Sorry, I had trouble processing that.');
+                }
+            }
+
+            speak(text) {
+                // Clean text for speech
+                text = text.replace(/<[^>]*>/g, '');
+                text = text.substring(0, 200); // Limit length
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1.0;
+                utterance.pitch = 1.0;
+
+                utterance.onstart = () => {
+                    this.button.classList.add('speaking');
+                };
+
+                utterance.onend = () => {
+                    this.button.classList.remove('speaking');
+                };
+
+                speechSynthesis.speak(utterance);
+            }
+
+            setupEventListeners() {
+                this.button.addEventListener('click', () => {
+                    if (this.isListening) {
+                        this.recognition.stop();
+                        this.isListening = false;
+                    } else {
+                        this.recognition.start();
+                        this.isListening = true;
+                    }
+                });
+
+                // Space bar to talk
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        this.button.click();
+                    }
+                });
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            new SimpleVoice();
+        });
+    </script>
+</body>
+</html>
