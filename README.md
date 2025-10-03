@@ -1,4 +1,4 @@
-# 🏨 HotelPilot - Multi-Agent AI Hotel Operations System
+# 🏨 Hotely - Multi-Agent AI Hotel Operations System
 
 A comprehensive multi-agent AI system for hotel operations featuring voice interactions, dynamic pricing, guest communications, and automated booking management.
 
@@ -29,8 +29,8 @@ A comprehensive multi-agent AI system for hotel operations featuring voice inter
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/hotelpilot.git
-cd hotelpilot
+git clone https://github.com/yourusername/hotely.git
+cd hotely
 ```
 
 2. **Install dependencies**
@@ -40,7 +40,7 @@ pip install -r requirements.txt
 
 3. **Configure environment**
 ```bash
-# Edit hotelpilot/.env
+# Edit hotely/.env
 GOOGLE_AI_API_KEY=your_gemini_api_key_here
 RETELL_API_KEY=your_retell_api_key_here  # Optional for phone features
 RETELL_AGENT_ID=agent_xxxxx  # Will be created if not provided
