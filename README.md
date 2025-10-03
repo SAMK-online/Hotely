@@ -58,27 +58,11 @@ Choose from:
 - Option 6: Test All Agents
 
 ## 📱 System Architecture
+**Hotely** is a multi-agent AI system built on Google ADK with 6 specialized agents: **Ops Copilot** (master supervisor), **Demand Manager** (flight-aware pricing), **Guest Lifecycle** (communications), **Housekeeping Scheduler** (staff optimization), **Billing Recovery** (payment processing), and **Comms Concierge** (voice/chat).
 
-```
-┌─────────────────────────────────────────────────┐
-│                   User Interfaces                │
-├────────────┬──────────┬──────────┬──────────────┤
-│  Web Chat  │  Voice   │  Phone   │   Webhook    │
-│   (8080)   │  (8080)  │ (Retell) │    (5001)    │
-└────────────┴──────────┴──────────┴──────────────┘
-                         │
-┌─────────────────────────────────────────────────┐
-│              Multi-Agent System                  │
-├──────────────────────────────────────────────────┤
-│  Ops Copilot → Demand Manager → Guest Lifecycle │
-│       ↓              ↓               ↓          │
-│  Housekeeping ← Billing Recovery ← Comms Agent  │
-└─────────────────────────────────────────────────┘
-                         │
-┌─────────────────────────────────────────────────┐
-│               Google Gemini AI                   │
-│            (gemini-2.5-flash model)              │
-└─────────────────────────────────────────────────┘
+The system integrates with hotel PMS (Mews/Cloudbeds), payment processing (Stripe), communications (Twilio/WhatsApp), and external data sources (FlightAware, event APIs) to automate 70-80% of routine operations.
+
+Users interact via **Web UI **, **Voice calls (Retell.ai)**, **API webhooks **, and **mobile/SMS channels**. All processing is powered by Google Gemini models with complete audit trails and PCI/GDPR compliance.
 ```
 
 ## 🎤 Voice & Phone Features
